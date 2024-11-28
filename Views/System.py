@@ -13,8 +13,8 @@ import os
 @st.cache_resource
 def load_yolo_models():
     try:
-        model_1 = YOLO(r"C:\Users\ADMIN\Desktop\Model\best.pt")
-        model_2 = YOLO(r"C:\Users\ADMIN\Desktop\Model\best (1).pt")
+        model_1 = YOLO("https://github.com/Mush-Man/Streamlit_WebApp_demo/blob/main/best.pt")
+        model_2 = YOLO("https://github.com/Mush-Man/Streamlit_WebApp_demo/blob/main/best (1).pt")
         return model_1, model_2
     except Exception as e:
         st.error(f"Error loading YOLO models: {e}")
