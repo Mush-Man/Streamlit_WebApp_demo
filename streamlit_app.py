@@ -2,13 +2,13 @@ import streamlit as st
 
 # --- PAGE SETUP ---
 Home = st.Page(
-    "views/Home.py",
+    "Views/Home.py",
     title="Home",
     icon=":material/home:",
     default=True,
 )
 project_1_page = st.Page(
-    "views/about_us.py",
+    "Views/about_us.py",
     title="About Us",
     icon=":material/groups:",
 )
