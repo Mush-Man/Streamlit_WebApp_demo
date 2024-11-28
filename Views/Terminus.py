@@ -7,7 +7,7 @@ import tempfile
 import os
 
 # Path to your YOLO model
-MODEL_PATH = r"C:\Users\ADMIN\Desktop\Model\best.pt"  # Update this to the path of your .pt model
+MODEL_PATH = "https://github.com/Mush-Man/Streamlit_WebApp_demo/blob/main/best.pt"  # Update this to the path of your .pt model
 model = YOLO(MODEL_PATH)  # Load the YOLO model
 
 # Streamlit UI
