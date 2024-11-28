@@ -8,8 +8,8 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 
 # Load YOLO models
-model_road = YOLO(r"C:\Users\ADMIN\Desktop\Model\best.pt")
-model_bridge = YOLO(r"C:\Users\ADMIN\Desktop\Model\best (1).pt")
+model_road = YOLO("https://github.com/Mush-Man/Streamlit_WebApp_demo/blob/main/best.pt")
+model_bridge = YOLO("https://github.com/Mush-Man/Streamlit_WebApp_demo/blob/main/best (1).pt")
 
 # Helper Functions
 def analyze_video(video_path, model):
