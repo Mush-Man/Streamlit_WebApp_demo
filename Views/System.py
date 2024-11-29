@@ -1,6 +1,21 @@
+import streamlit as st
+import cv2
+import tempfile
+import os
+import numpy as np
+from ultralytics import YOLO
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+import sqlite3
+from PIL import Image
+from datetime import datetime
+
+# Load YOLO Models
+@st.cache_resource
+def load_yolo_models():
     try:
-        model_1 = YOLO("https://drive.google.com/uc?id=1MMNzrExJRw14OZTmcaMRk6dfuCfzsPwi&export=download")
-        model_2 = YOLO("https://drive.google.com/uc?id=1-5TdFXe7D4t4ewIqc3lTfFFbKXNn-nlV&export=download")
+        model_1 = YOLO("https://raw.githubusercontent.com/Mush-Man/Streamlit_WebApp_demo/main/best.pt")
+        model_2 = YOLO("https://raw.githubusercontent.com/Mush-Man/Streamlit_WebApp_demo/main/best%20(1).pt")
 
         return model_1, model_2
     except Exception as e:
