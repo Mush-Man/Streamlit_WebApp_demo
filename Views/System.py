@@ -1,13 +1,14 @@
 import streamlit as st
+import cv2
+import tempfile
+import os
+import numpy as np
+from ultralytics import YOLO
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
 import sqlite3
 from PIL import Image
-import numpy as np
-import cv2
-from ultralytics import YOLO
 from datetime import datetime
-import tempfile
-from fpdf import FPDF
-import os
 
 # Load YOLO Models
 @st.cache_resource
@@ -18,7 +19,7 @@ def load_yolo_models():
         return model_1, model_2
     except Exception as e:
         st.error(f"Error loading YOLO models: {e}")
-        return None, None
+        return [], []
 
 model_1, model_2 = load_yolo_models()
 
@@ -28,36 +29,34 @@ def init_db():
     with sqlite3.connect(db_path) as conn:
         c = conn.cursor()
         c.execute('''CREATE TABLE IF NOT EXISTS inventory (
-                        id INTEGER PRIMARY KEY,
-                        name TEXT,
-                        location TEXT,
-                        type TEXT,
-                        built_year INTEGER,
-                        last_inspection TEXT
-                     )''')
+                                id INTEGER PRIMARY KEY,
+                                name TEXT,
+                                location TEXT,
+                                type TEXT,
+                                built_year INTEGER,
+                                last_inspection TEXT
+                            )''')
         c.execute('''CREATE TABLE IF NOT EXISTS inspections (
-                        id INTEGER PRIMARY KEY,
-                        inventory_id INTEGER,
-                        date TEXT,
-                        defects TEXT,
-                        severity TEXT,
-                        length REAL,
-                        width REAL,
-                        image_path TEXT,
-                        FOREIGN KEY (inventory_id) REFERENCES inventory (id)
-                     )''')
+                                id INTEGER PRIMARY KEY,
+                                inventory_id INTEGER,
+                                date TEXT,
+                                defects TEXT,
+                                severity TEXT,
+                                length REAL,
+                                width REAL,
+                                image_path TEXT,
+                                FOREIGN KEY (inventory_id) REFERENCES inventory (id)
+                            )''')
         conn.commit()
 
 init_db()
-
-# Rest of the code remains unchanged but adheres to the same improvements...
 
 # Add Inventory Record
 def add_inventory(name, location, type_, built_year):
     with sqlite3.connect("bridge_road_management.db") as conn:
         c = conn.cursor()
         c.execute("INSERT INTO inventory (name, location, type, built_year, last_inspection) VALUES (?, ?, ?, ?, ?)",
-                  (name, location, type_, built_year, None))
+                     (name, location, type_, built_year, None))
         conn.commit()
 
 # Fetch Inventory Records
@@ -72,7 +71,7 @@ def detect_defects(image, models, selected_classes):
     if not models:
         st.error("No models selected.")
         return None, []
-    
+
     defects = []
     annotated_image = image.copy()
 
@@ -101,7 +100,7 @@ def generate_pdf_report(inventory_id, defects, length, width, annotated_image_pa
     if not inventory:
         st.error("Inventory record not found.")
         return None
-    
+
     pdf = FPDF()
     pdf.set_auto_page_break(auto=True, margin=15)
     pdf.add_page()
@@ -176,24 +175,7 @@ elif choice == "Condition Inspection":
     if "Model 2" in model_choice:
         models.append(model_2)
 
-    all_classes = list(set(model_1.names.values()).union(set(model_2.names.values())))
-    selected_classes = st.multiselect("Select Defects to Detect", all_classes)
-
-    if inspection_type == "Image Upload":
-        uploaded_file = st.file_uploader("Upload Inspection Image", type=["jpg", "jpeg", "png"])
-        if uploaded_file and selected_classes and st.button("Inspect Image"):
-            image = Image.open(uploaded_file)
-            image_np = np.array(image)
-
-            temp_image_path, defects = detect_defects(image_np, models, selected_classes)
-            if temp_image_path:
-                st.image(temp_image_path, caption="Annotated Image", use_column_width=True)
-                pdf_path = generate_pdf_report(inventory_id, defects, length, width, temp_image_path)
-                if pdf_path:
-                    with open(pdf_path, "rb") as pdf_file:
-                        st.download_button(
-                            label="Download Inspection Report as PDF",
-                            data=pdf_file,
-                            file_name="inspection_report.pdf",
-                            mime="application/pdf",
-                        )
+    all_classes = []
+    if model_1:
+        all_classes.extend(model_1.names.values())
+    if model_2
