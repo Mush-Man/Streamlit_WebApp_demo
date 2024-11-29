@@ -114,7 +114,7 @@ def footer():
         }
         </style>
         <div class='footer'>
-            <p>&copy; 2024 Terminus AI. All rights reserved. Developed by Melange</p>
+            <p>&copy; 2024 Terminus AI. All rights reserved. Developed by Mélange</p>
         </div>
         """,
         unsafe_allow_html=True,
