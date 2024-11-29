@@ -13,16 +13,11 @@ project_1_page = st.Page(
     icon=":material/groups:",
 )
 project_2_page = st.Page(
-    "Views/Terminus.py",
-    title="Terminus",
-    icon=":material/smart_toy:",
-)
-project_3_page = st.Page(
     "Views/System.py",
     title="Photo Upload",
     icon=":material/smart_toy:",
 )
-project_4_page = st.Page(
+project_3_page = st.Page(
     "Views/Video.py",
     title="Video and Real Time",
     icon=":material/smart_toy:",
@@ -34,7 +29,7 @@ project_4_page = st.Page(
 pg = st.navigation(
     {
         "Main": [Home, project_1_page],
-        "Projects": [project_2_page, project_3_page, project_4_page],
+        "Projects": [project_2_page, project_3_page],
     }
 )
 
