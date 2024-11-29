@@ -175,11 +175,11 @@ elif choice == "Condition Inspection":
     if "Model 2" in model_choice:
         models.append(model_2)
 
-    all_classes = []
+all_classes = []
 if model_1:
-    all_classes.extend(model_1.names.values())
+  all_classes.extend(model_1.names.values())
 if model_2:
-    all_classes.extend(model_2.names.values())
+  all_classes.extend(model_2.names.values())
 all_classes = list(set(all_classes))
 selected_classes = st.multiselect("Select Defects to Detect", all_classes)
 
