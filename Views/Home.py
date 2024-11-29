@@ -1,9 +1,7 @@
 import streamlit as st
 
-
 # Run the main banner display
 def run():
-
     st.markdown(
         """
         <style>
@@ -51,8 +49,8 @@ def features():
         <style>
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
         }
         .feature-box {
             background-color: #002b36;
@@ -60,7 +58,7 @@ def features():
             border-radius: 10px;
             padding: 20px;
             text-align: center;
-            text-color: #002b36;
+            color: white;
             transition: transform 0.2s;
         }
         .feature-box:hover {
@@ -71,6 +69,12 @@ def features():
             font-size: 40px;
             color: #4CAF50;
             margin-bottom: 15px;
+        }
+        @media (max-width: 768px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
         }
         </style>
         <h2>Features</h2>
@@ -115,7 +119,6 @@ def footer():
         """,
         unsafe_allow_html=True,
     )
-
 
 run()
 st.markdown("<hr>", unsafe_allow_html=True)
