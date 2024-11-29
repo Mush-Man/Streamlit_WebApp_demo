@@ -24,7 +24,8 @@ model_1, model_2 = load_yolo_models()
 
 # Database Setup
 def init_db():
-    with sqlite3.connect("bridge_road_management.db") as conn:
+    db_path = "bridge_road_management.db"
+    with sqlite3.connect(db_path) as conn:
         c = conn.cursor()
         c.execute('''CREATE TABLE IF NOT EXISTS inventory (
                         id INTEGER PRIMARY KEY,
@@ -48,6 +49,8 @@ def init_db():
         conn.commit()
 
 init_db()
+
+# Rest of the code remains unchanged but adheres to the same improvements...
 
 # Add Inventory Record
 def add_inventory(name, location, type_, built_year):
