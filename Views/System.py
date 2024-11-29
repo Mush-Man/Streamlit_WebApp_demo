@@ -14,7 +14,7 @@ from datetime import datetime
 @st.cache_resource
 def load_yolo_models():
     try:
-        model_1 = YOLO("https://drive.google.com/file/d/1MMNzrExJRw14OZTmcaMRk6dfuCfzsPwi/view?usp=drive_link")
+        model_1 = YOLO("https://drive.google.com/file/d/1MMNzrExJRw14OZTmcaMRk6dfuCfzsPwi/view?usp=sharing")
         model_2 = YOLO("https://drive.google.com/file/d/1-5TdFXe7D4t4ewIqc3lTfFFbKXNn-nlV/view?usp=sharing")
         return model_1, model_2
     except Exception as e:
