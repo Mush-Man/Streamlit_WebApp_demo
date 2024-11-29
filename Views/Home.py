@@ -28,7 +28,8 @@ def about_model():
         """
         <style>
         .about-section {
-            background-color: #222;
+            background-color: #002b36;
+            border-color: white;
             padding: 50px;
             text-align: center;
             border-radius: 10px;
