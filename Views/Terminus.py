@@ -126,7 +126,7 @@ def run_camera_streamlit(selected_classes):
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
         # Display the frame in Streamlit
-        st_frame.image(frame_rgb, channels="RGB", use_container_width=True)
+        st_frame.image(frame_rgb, channels="RGB")
 
     cap.release()
 
@@ -137,10 +137,10 @@ if option == "Image":
     uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "png"])
     if uploaded_file is not None:
         img = Image.open(uploaded_file)
-        st.image(img, caption="Uploaded Image", use_container_width=True)
+        st.image(img, caption="Uploaded Image", use_column_width=True)
         annotated_image = process_image(img)
 
-        st.image(annotated_image, caption="Processed Image with Detections", use_container_width=True)
+        st.image(annotated_image, caption="Processed Image with Detections")
 
         # Save and download the annotated image
         annotated_image_pil = Image.fromarray(annotated_image)
@@ -172,3 +172,4 @@ elif option == "Real-Time Camera":
     st.write("Click the button below to start the camera.")
     if st.button("Start Camera"):
         run_camera_streamlit(selected_classes)
+
