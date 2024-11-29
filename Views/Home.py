@@ -54,7 +54,7 @@ def features():
             gap: 30px;
         }
         .feature-box {
-            background-color: #222;
+            background-color: #002b36;
             border: 1px solid #F5F5F5;
             border-radius: 10px;
             padding: 20px;
