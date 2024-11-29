@@ -72,7 +72,7 @@ def fetch_inventory():
         return c.fetchall()
 
 # YOLO Detection Function
-def detect_defects(image, models):
+def detect_defects(image, models, selected_classes):
     defects = []
     annotated_image = image.copy()
 
@@ -84,10 +84,11 @@ def detect_defects(image, models):
         for detection in detections:
             x1, y1, x2, y2, conf, cls = detection
             cls_name = class_names.get(int(cls), "Unknown")
-            label = f"{cls_name} ({conf:.2f})"
-            defects.append(cls_name)
-            cv2.rectangle(annotated_image, (int(x1), int(y1)), (int(x2), int(y2)), (0, 255, 0), 2)
-            cv2.putText(annotated_image, label, (int(x1), int(y1) - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+            if cls_name in selected_classes:
+                label = f"{cls_name} ({conf:.2f})"
+                defects.append(cls_name)
+                cv2.rectangle(annotated_image, (int(x1), int(y1)), (int(x2), int(y2)), (0, 255, 0), 2)
+                cv2.putText(annotated_image, label, (int(x1), int(y1) - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
     # Save the annotated image temporarily
     temp_image_path = tempfile.NamedTemporaryFile(delete=False, suffix=".jpg").name
@@ -170,13 +171,17 @@ elif choice == "Condition Inspection":
     if "Model 2" in model_choice:
         models.append(model_2)
 
+    # Combine classes from both models and let the user select
+    all_classes = list(set(model_1.names.values()).union(set(model_2.names.values())))
+    selected_classes = st.multiselect("Select Defects to Detect", all_classes)
+
     if inspection_type == "Image Upload":
         uploaded_file = st.file_uploader("Upload Inspection Image", type=["jpg", "jpeg", "png"])
-        if uploaded_file and st.button("Inspect Image"):
+        if uploaded_file and selected_classes and st.button("Inspect Image"):
             image = Image.open(uploaded_file)
             image_np = np.array(image)
 
-            temp_image_path, defects = detect_defects(image_np, models)
+            temp_image_path, defects = detect_defects(image_np, models, selected_classes)
             if temp_image_path:
                 st.image(temp_image_path, caption="Annotated Image", use_column_width=True)
                 pdf_path = generate_pdf_report(inventory_id, defects, length, width, temp_image_path)
