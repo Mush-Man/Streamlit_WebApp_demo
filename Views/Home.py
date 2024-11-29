@@ -105,7 +105,7 @@ def footer():
         """
         <style>
         .footer {
-            background-color: #222;
+            background-color: #002b36;
             color: white;
             text-align: center;
             padding: 10px;
@@ -114,7 +114,7 @@ def footer():
         }
         </style>
         <div class='footer'>
-            <p>&copy; 2024 Terminus AI. All rights reserved.</p>
+            <p>&copy; 2024 Terminus AI. All rights reserved. Developed by Melange</p>
         </div>
         """,
         unsafe_allow_html=True,
