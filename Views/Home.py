@@ -59,6 +59,7 @@ def features():
             border-radius: 10px;
             padding: 20px;
             text-align: center;
+            text-color: #002b36;
             transition: transform 0.2s;
         }
         .feature-box:hover {
