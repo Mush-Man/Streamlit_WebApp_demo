@@ -30,8 +30,8 @@ st.write(
 Carl Sagan once said, “Human beings are like butterflies that flutter for a day and think it’s 
 forever.” It’s true that, compared to the lifespan of the universe, our lives begin and end in the 
 blink of an eye. Yet, the impact we make can transcend time. This desire to leave a lasting mark 
-is what led to the inception of Magneto, a startup in the early stages of its development, driven 
-by four former university students who are passionate about creating innovative solutions to 
+is what led to the inception of Mélange, a startup in the early stages of its development, driven 
+by two former university students who are passionate about creating innovative solutions to 
 address todays challenges.
 
 The world is progressing rapidly, with the fourth industrial revolution currently underway. 
@@ -40,7 +40,7 @@ agriculture, 5G, and maglev trains are being introduced to improve lives. Meanwh
 seems to be lagging behind, facing challenges like power outages, poor crop yields, diesel powered trains, 
 and limited internet access, among others. At this rate, when will we catch up with the rest of the world
     
-As Magneto, we envision Zambia advancing at the same pace as 
+As Mélange, we envision Zambia advancing at the same pace as 
 the rest of the world. Our current slogan, “The Next Tomorrow,” reflects our ambition to bring 
 ground breaking technological advancements to the country, we are currently working on three 
 projects to help address some of the challenges being faced.
