@@ -13,10 +13,11 @@ model_bridge = YOLO("https://raw.githubusercontent.com/Mush-Man/Streamlit_WebApp
 
 # Helper Functions
 def analyze_video(video_path, model):
+    """Analyze a video file using the YOLO model."""
     cap = cv2.VideoCapture(video_path)
     output_path = tempfile.NamedTemporaryFile(delete=False, suffix='.mp4').name
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    fps = cap.get(cv2.CAP_PROP_FPS)
+    fps = cap.get(cv2.CAP_PROP_FPS) or 20  # Default to 20 if FPS is unavailable
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     out = cv2.VideoWriter(output_path, fourcc, fps, (width, height))
@@ -26,46 +27,44 @@ def analyze_video(video_path, model):
         if not ret:
             break
 
-        results = model(frame)
-        if len(results) > 0:  # Check if any detections were found
-            annotated_frame = results[0].plot()  # Use the plot() method
-            out.write(annotated_frame)
-        else:
-            # Handle the case where no detections were found
-            st.info("No defects detected in this frame.")
+        results = model.predict(frame, verbose=False)  # Disable verbose logging
+        annotated_frame = results[0].plot() if results else frame  # Annotate if detections exist
+        out.write(annotated_frame)
 
     cap.release()
     out.release()
     return output_path
 
 def analyze_camera_feed(model):
+    """Analyze real-time camera feed."""
     st.info("Using real-time camera feed...")
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(0)  # Default camera
+
     if not cap.isOpened():
-        st.error("Camera not accessible.")
-        return None
+        st.error("Camera not accessible. Check your hardware or permissions.")
+        return
 
-    stop_button = st.button("Stop Analysis", key="stop_analysis_button")  # Add unique key
+    stop_button = st.button("Stop Analysis")
+    st_frame = st.empty()
 
-    while not stop_button:
+    while cap.isOpened() and not stop_button:
         ret, frame = cap.read()
         if not ret:
+            st.warning("No frames received from camera. Stopping analysis.")
             break
 
-        results = model(frame)
-        if len(results) > 0:
-            annotated_frame = results[0].plot()
-        else:
-            annotated_frame = frame  # Display original frame if no detections
+        results = model.predict(frame, verbose=False)
+        annotated_frame = results[0].plot() if results else frame
 
-        # Display the live frame
+        # Display the annotated frame
         frame_rgb = cv2.cvtColor(annotated_frame, cv2.COLOR_BGR2RGB)
-        st.image(frame_rgb, channels="RGB", use_container_width=True)
+        st_frame.image(frame_rgb, channels="RGB")
 
     cap.release()
-    return True
+    st.success("Camera feed stopped.")
 
 def generate_pdf_report(defects_summary, pdf_path):
+    """Generate a PDF report of detected defects."""
     c = canvas.Canvas(pdf_path, pagesize=letter)
     c.setFont("Helvetica", 12)
     c.drawString(100, 750, "Infrastructure Management System - Defect Report")
@@ -77,6 +76,7 @@ def generate_pdf_report(defects_summary, pdf_path):
     c.save()
 
 def download_file(file_path, label):
+    """Provide a download link for the given file."""
     with open(file_path, "rb") as file:
         btn = st.download_button(
             label=label,
@@ -116,16 +116,15 @@ elif data_mode == "Use real-time camera":
 
     if st.button("Start Camera Analysis"):
         st.info("Initializing camera...")
-        if analyze_camera_feed(model):
-            st.success("Camera feed analyzed successfully!")
+        analyze_camera_feed(model)
 
 # Generate PDF report
 if st.button("Generate Report"):
     st.info("Generating defect report...")
     pdf_path = tempfile.NamedTemporaryFile(delete=False, suffix=".pdf").name
 
-    # **Implement logic to extract defect information from model output**
-    defects_summary = ["Defect 1: Example", "Defect 2: Example"]  # Replace with actual defects
+    # Placeholder for defect extraction logic
+    defects_summary = ["Defect 1: Crack on road", "Defect 2: Spalling on bridge"]  # Replace with actual data
 
     generate_pdf_report(defects_summary, pdf_path)
     download_file(pdf_path, "Download PDF Report")
