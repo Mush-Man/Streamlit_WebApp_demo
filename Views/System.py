@@ -176,6 +176,28 @@ elif choice == "Condition Inspection":
         models.append(model_2)
 
     all_classes = []
-    if model_1:
-        all_classes.extend(model_1.names.values())
-    if model_2
+if model_1:
+    all_classes.extend(model_1.names.values())
+if model_2:
+    all_classes.extend(model_2.names.values())
+all_classes = list(set(all_classes))
+selected_classes = st.multiselect("Select Defects to Detect", all_classes)
+
+if inspection_type == "Image Upload":
+    uploaded_file = st.file_uploader("Upload Inspection Image", type=["jpg", "jpeg", "png"])
+    if uploaded_file and selected_classes and st.button("Inspect Image"):
+        image = Image.open(uploaded_file)
+        image_np = np.array(image)
+
+        temp_image_path, defects = detect_defects(image_np, models, selected_classes)
+        if temp_image_path:
+            st.image(temp_image_path, caption="Annotated Image", use_column_width=True)
+            pdf_path = generate_pdf_report(inventory_id, defects, length, width, temp_image_path)
+            if pdf_path:
+                with open(pdf_path, "rb") as pdf_file:
+                    st.download_button(
+                        label="Download Inspection Report as PDF",
+                        data=pdf_file,
+                        file_name="inspection_report.pdf",
+                        mime="application/pdf",
+                    )
